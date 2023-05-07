@@ -1,0 +1,219 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.BLL\\QLL.BLL.csproj": {}
+  },
+  "projects": {
+    "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.BLL\\QLL.BLL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.BLL\\QLL.BLL.csproj",
+        "projectName": "QLL.BLL",
+        "projectPath": "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.BLL\\QLL.BLL.csproj",
+        "packagesPath": "C:\\Users\\Hung\\.nuget\\packages\\",
+        "outputPath": "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.BLL\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Hung\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DAL\\QLL.DAL.csproj": {
+                "projectPath": "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DAL\\QLL.DAL.csproj"
+              },
+              "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DTO\\QLL.DTO.csproj": {
+                "projectPath": "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DTO\\QLL.DTO.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DAL\\QLL.DAL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DAL\\QLL.DAL.csproj",
+        "projectName": "QLL.DAL",
+        "projectPath": "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DAL\\QLL.DAL.csproj",
+        "packagesPath": "C:\\Users\\Hung\\.nuget\\packages\\",
+        "outputPath": "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DAL\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Hung\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DTO\\QLL.DTO.csproj": {
+                "projectPath": "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DTO\\QLL.DTO.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.12, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.12, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.12, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.12, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DTO\\QLL.DTO.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DTO\\QLL.DTO.csproj",
+        "projectName": "QLL.DTO",
+        "projectPath": "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DTO\\QLL.DTO.csproj",
+        "packagesPath": "C:\\Users\\Hung\\.nuget\\packages\\",
+        "outputPath": "D:\\Thanh_Hung\\LTCSDL\\git\\Nhom06_IM91_LTCSDL\\QuanLyLop\\QLL.DTO\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Hung\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

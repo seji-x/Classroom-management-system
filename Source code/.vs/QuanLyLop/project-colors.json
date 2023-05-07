@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "7caacda9-d197-441c-977a-ecc5875ccc65": {
+      "ProjectGuid": "7caacda9-d197-441c-977a-ecc5875ccc65",
+      "DisplayName": "QLL.DAL",
+      "ColorIndex": 0
+    },
+    "c018fdf3-5bdf-45a0-bfc3-4f3e2d653736": {
+      "ProjectGuid": "c018fdf3-5bdf-45a0-bfc3-4f3e2d653736",
+      "DisplayName": "QuanLyLop",
+      "ColorIndex": 1
+    },
+    "c993dae7-a205-4fd4-a8c8-5251a89ed5a8": {
+      "ProjectGuid": "c993dae7-a205-4fd4-a8c8-5251a89ed5a8",
+      "DisplayName": "QLL.DTO",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}

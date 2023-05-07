@@ -1,0 +1,175 @@
+﻿@page
+@model QuanLyLop.Pages.HomeModel
+@using QLL.DTO
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+@section menu_nav
+    {
+    <li>
+        <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="background-color: #222d32; height: 35px; margin: 0px 10px; ">
+    </li>
+    <li class="nav-item d-flex align-items-center" style="font-weight: 500;">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Index">
+            @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+            {
+                @Model.busAd.GetById(HttpContext.Session.GetString("user_id")).TenAdmin
+            }
+            else if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+            {
+                @Model.busGV.GetByID(HttpContext.Session.GetString("user_id")).TenGv
+            }
+            else
+            {
+                @Model.busHS.GetHSByID(HttpContext.Session.GetString("user_id")).TenHs
+            }
+        </a>
+    </li>
+    <li class="nav-item d-flex align-items-center">
+        <a class="nav-link btn btn-outline-danger" asp-area="" asp-page="/Index">Đăng xuất</a>
+    </li>
+
+}
+@section menu
+    {
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "hs")
+    {
+        <partial name="~/Pages/Shared/_Menu_HS.cshtml" />
+
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+    {
+        <partial name="~/Pages/Shared/_Menu_GV.cshtml" />
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+    {
+        <partial name="~/Pages/Shared/_Menu_admin.cshtml" />
+    }
+}
+@if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+{
+    <div class="header">
+        <div class="item">
+            <a href="#">
+                <div class="icon-item">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="title">
+                    <h5>Học sinh</h5>
+                    <strong>@Model.totalHS</strong>
+                </div>
+            </a>
+        </div>
+        <div class="item">
+            <a>
+                <div class="icon-item">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <div class="title">
+                    <h5>Giáo viên</h5>
+                    <strong>@Model.totalGV</strong>
+                </div>
+            </a>
+        </div>
+        <div class="item">
+            <a>
+                <div class="icon-item">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="title">
+                    <h5>Tài khoản</h5>
+                    <strong>@Model.totalTK</strong>
+                </div>
+            </a>
+        </div>
+        <div class="item">
+            <a>
+                <div class="icon-item">
+                    <i class="fas fa-school"></i>
+                </div>
+                <div class="title">
+                    <h5>Lớp</h5>
+                    <strong>@Model.totalL</strong>
+                </div>
+            </a>
+        </div>
+    </div>
+    <label class="form-control">Dách sách lớp</label>
+    <div class="class-items">
+        @foreach (LopDTO l in Model.lstLop)
+        {
+            <div class="card a">
+                <a asp-area="" asp-page="/InFo_Lop" asp-route-maLop="@l.MaLop">
+                    <img class="card-img-top" src="~/images/1.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <span style="color: #6c757d">@l.MoTa</span>
+                        <p class="card-text">[@l.MaLop] @l.TenLop ...</p>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+}
+@if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+{
+    <label class="form-control">Dách sách lớp</label>
+    <div class="class-items">
+        @foreach (LopDTO l in Model.lstLop_GV)
+        {
+            <div class="card a">
+                <a asp-area="" asp-page="/InFo_Lop" asp-route-maLop="@l.MaLop">
+                    <img class="card-img-top" src="~/images/1.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <span style="color: #6c757d">@l.MoTa</span>
+                        <p class="card-text">[@l.MaLop] @l.TenLop ...</p>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+
+}
+@if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "hs")
+{
+    int maLop = Model.busHS.GetHSByID(HttpContext.Session.GetString("user_id")).MaLop;
+    <h1 class="text-center">
+        Chào mừng @Model.busHS.GetHSByID(HttpContext.Session.GetString("user_id")).TenHs
+        quay lại lớp @Model.busLop.GetLopById(maLop).TenLop
+    </h1>
+    <div class="header">
+        <div class="item">
+            <a href="#">
+                <div class="icon-item">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="title">
+                    <h5>Sỉ số</h5>
+                    <strong>@Model.totalHS</strong>
+                </div>
+            </a>
+        </div>
+        <div class="item">
+            <a>
+                <div class="icon-item">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="title">
+                    <h5>Môn học</h5>
+                    <strong>@Model.totalMH</strong>
+                </div>
+            </a>
+        </div>
+        <div class="item">
+            <a>
+                <div class="icon-item">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="title">
+                    <h5>Điểm trung bình</h5>
+                    <strong>@Model.totalDTB</strong>
+                </div>
+            </a>
+        </div>
+    </div>
+}

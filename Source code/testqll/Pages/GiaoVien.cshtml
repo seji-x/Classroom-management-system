@@ -1,0 +1,215 @@
+﻿@page
+@using QLL.DTO
+@using System.Text.Json
+@Html.AntiForgeryToken()
+@using Microsoft.AspNetCore.Http
+@model QuanLyLop2_ASP.NETCore.Pages.GiaoVienModel
+@using Microsoft.AspNetCore.Antiforgery
+@{
+    ViewData["Title"] = "Quản lý giáo viên";
+}
+@inject IAntiforgery antiforgery
+@{
+    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+<script type="text/javascript">
+    var dataGV1 = @Html.Raw(JsonSerializer.Serialize(Model.lstGV1));
+    var dataGV = @Html.Raw(JsonSerializer.Serialize(Model.lstGV));
+    var curPage = 1;
+    var totPage = @Html.Raw(Model.TotalPage);
+</script>
+@section menu_nav
+    {
+    <li>
+        <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="background-color: #222d32; height: 35px; margin: 0px 10px; ">
+    </li>
+    <li class="nav-item d-flex align-items-center" style="font-weight: 500;">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Home">
+            @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+            {
+                @Model.busAd.GetById(HttpContext.Session.GetString("user_id")).TenAdmin
+            }
+            else if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+            {
+                @Model.busGV.GetByID(HttpContext.Session.GetString("user_id")).TenGv
+            }
+            else
+            {
+                @Model.busHS.GetHSByID(HttpContext.Session.GetString("user_id")).TenHs
+            }
+        </a>
+    </li>
+    <li class="nav-item d-flex align-items-center">
+        <a class="nav-link btn btn-outline-danger" asp-area="" asp-page="/Index">Đăng xuất</a>
+    </li>
+
+}
+@section menu
+    {
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "hs")
+    {
+        <partial name="~/Pages/Shared/_Menu_HS.cshtml" />
+
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+    {
+        <partial name="~/Pages/Shared/_Menu_GV.cshtml" />
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+    {
+        <partial name="~/Pages/Shared/_Menu_admin.cshtml" />
+    }
+}
+<div>
+    <h1 class="display-4 text-center">Danh sách giáo viên.</h1>
+    <form method="post" asp-page="/GiaoVien">
+        <div class="row">
+            <div class="col-2 form-group">
+                <label asp-for="@Model.maGV"></label>
+                <input type="text" class="form-control" asp-for="@Model.maGV" />
+            </div>
+            <div class="col-3 form-group">
+                <label asp-for="@Model.tenGV"></label>
+                <input type="text" class="form-control" asp-for="@Model.tenGV" />
+            </div>
+            <div class="col-3 form-group">
+                <label asp-for="@Model.tdcm"></label>
+                <input type="text" class="form-control" asp-for="@Model.tdcm" />
+            </div>
+            <div class="col-3 form-group">
+                <label asp-for="@Model.cn"></label>
+                <input type="text" class="form-control" asp-for="@Model.cn" />
+            </div>
+            <div style="margin-block: auto; margin-left: auto;" class="col-2 form-group">
+                <br />
+                <input type="submit" class="btn btn-primary" value="Tìm kiếm" />
+            </div>
+        </div>
+    </form>
+    <button style="margin: 10px 0px" type="button" onclick="openModalGV(null);" class="btn btn-outline-primary btn-sm">Thêm giáo viên</button>
+    <table id="tableGV" class="table table-striped">
+        <tr>
+            <th>Mã Giáo viên</th>
+            <th>Tên Giáo viên</th>
+            <th>Giới tính</th>
+            <th>Ngày sinh</th>
+            <th>Đia chỉ</th>
+            <th>SĐT</th>
+            <th>Email</th>
+            <th>Chuyên Ngành</th>
+            <th>Trình độ</th>
+            <th>Action</th>
+        </tr>
+        <tbody id="tbodyDT">
+            @foreach (GiaoVienDTO hs in Model.lstGV1)
+            {
+                <tr id="trGV_@hs.MaGv">
+                    <td>@hs.MaGv</td>
+                    <td>@hs.TenGv</td>
+                    <td>@hs.GioiTinh</td>
+                    <td>@hs.NgaySinh</td>
+                    <td>@hs.DiaChi</td>
+                    <td>@hs.Sdt</td>
+                    <td>@hs.Email</td>
+                    <td>@hs.ChuyenNganh</td>
+                    <td>@hs.TrinhDoChuyenMon</td>
+                    <td>
+                        <button type="button" onclick="openModalGV('@hs.MaGv');" class="btn btn-outline-primary btn-sm">Sửa</button>
+                        <button type="button" onclick="deleteGV('@hs.MaGv');" class="btn btn-outline-danger btn-sm">xoá</button>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="goPre('GiaoVien')">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="javascript:void(0);"><span id="spanCurrentPage">1</span></a></li>
+            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="goNext('GiaoVien')">Next</a></li>
+        </ul>
+    </nav>
+</div>
+<div id="DivModalGV" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sửa giáo viên: <span id="MaGV"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" onclick="closeModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="txtMaGV">Mã giáo viên</label>
+                    <input type="text" class="form-control" id="txtMaGV" aria-describedby="MaGVHelp" placeholder="Mã Giáo viên: gv...">
+                    <small id="MaGVHelp" class="form-text text-muted">Không được bỏ trống, 5 kí tự.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtTenGV">Tên giáo viên</label>
+                    <input type="text" class="form-control" id="txtTenGV" aria-describedby="TenGVHelp" placeholder="Tên giáo viên">
+                    <small id="TenGVHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtNS">Ngày sinh</label>
+                    <input type="date" class="form-control" id="txtNS" value="2000-01-01"
+                           aria-describedby="NSHelp">
+                    <small id="NSHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="selGT">Giới tính</label>
+                    <select class="form-control" id="selGT">
+                        <option>Nam</option>
+                        <option>Nữ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="txtDiaChi">Địa chỉ</label>
+                    <input type="text" class="form-control" id="txtDiaChi" aria-describedby="DiaChiHelp" placeholder="Địa chỉ">
+                    <small id="DiaChiHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtSDT">Số điện thoại</label>
+                    <input type="text" class="form-control" id="txtSDT" aria-describedby="SDTlHelp" placeholder="Số điện thoại">
+                    <small id="SDTHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtEmail">Email</label>
+                    <input type="email" class="form-control" id="txtEmail" aria-describedby="DiaChiHelp" placeholder="Địa chỉ email">
+                    <small id="EmailHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtCN">Chuyên ngành</label>
+                    <input type="text" class="form-control" id="txtCN" aria-describedby="CNHelp" placeholder="Chuyên ngành">
+                    <small id="CNlHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtTDCM">Trình độ chuyên môn</label>
+                    <input type="text" class="form-control" id="txtTDCM" aria-describedby="TDCMHelp" placeholder="Trình độ chuyên môn">
+                    <small id="TDCMlHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()" data-dismiss="modal">Close</button>
+                <button type="button" onclick="saveGV()" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="gvTemplate" type="text/x-jquery-tmpl">
+    <tr id="trGV_${maGv}">
+        <td>${maGv}</td>
+        <td>${tenGv}</td>
+        <td>${gioiTinh}</td>
+        <td>${ngaySinh}</td>
+        <td>${diaChi}</td>
+        <td>${sdt}</td>
+        <td>${email}</td>
+        <td>${chuyenNganh}</td>
+        <td>${trinhDoChuyenMon}</td>
+        <td>
+            <button type="button" onclick="openModalGV('${maGv}');" class="btn btn-outline-primary btn-sm">Sửa</button>
+            <button type="button" onclick="deleteGV('${maGv}');" class="btn btn-outline-danger btn-sm">xoá</button>
+        </td>
+    </tr>
+</script>

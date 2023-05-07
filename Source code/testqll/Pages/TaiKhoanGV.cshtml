@@ -1,0 +1,134 @@
+﻿@page
+@using QLL.DTO
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@Html.AntiForgeryToken()
+@model QuanLyLop2_ASP.NETCore.Pages.TaiKhoanGVModel
+@using Microsoft.AspNetCore.Antiforgery
+@inject IAntiforgery antiforgery
+@{
+    ViewData["Title"] = "Quản lý tài khoản giáo viên";
+}
+@{
+    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+<script type="text/javascript">
+    var dataTKGV = @Html.Raw(JsonSerializer.Serialize(Model.lstTKGV));
+</script>
+@section menu_nav
+    {
+    <li>
+        <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="background-color: #222d32; height: 35px; margin: 0px 10px; ">
+    </li>
+    <li class="nav-item d-flex align-items-center" style="font-weight: 500;">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Index">
+            @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+            {
+                @Model.busAd.GetById(HttpContext.Session.GetString("user_id")).TenAdmin
+            }
+            else if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+            {
+                @Model.busGV.GetByID(HttpContext.Session.GetString("user_id")).TenGv
+            }
+            else
+            {
+                @Model.busHS.GetHSByID(HttpContext.Session.GetString("user_id")).TenHs
+            }
+        </a>
+    </li>
+    <li class="nav-item d-flex align-items-center">
+        <a class="nav-link btn btn-outline-danger" asp-area="" asp-page="/Index">Đăng xuất</a>
+    </li>
+
+}
+@section menu
+    {
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "hs")
+    {
+        <partial name="~/Pages/Shared/_Menu_HS.cshtml" />
+
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+    {
+        <partial name="~/Pages/Shared/_Menu_GV.cshtml" />
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+    {
+        <partial name="~/Pages/Shared/_Menu_admin.cshtml" />
+    }
+}
+<div>
+    <h1 class="display-4 text-center">Danh tài khoản giáo viên</h1>
+    <form method="post" asp-page="/TaiKhoanGV">
+        <div class="row">
+            <div class="col-2 form-group">
+                <label asp-for="@Model.tdn"></label>
+                <input type="text" class="form-control" asp-for="@Model.tdn" />
+            </div>
+            <div class="col-3 form-group">
+                <label asp-for="@Model.maTk"></label>
+                <input type="number" class="form-control" asp-for="@Model.maTk" />
+            </div>
+            <div style="margin-block: auto; margin-left: auto;" class="col-2 form-group">
+                <br />
+                <input type="submit" class="btn btn-primary" value="Tìm kiếm" />
+            </div>
+        </div>
+    </form>
+    <button style="margin: 10px 0px" type="button" onclick="openModalTKGV(null);" class="btn btn-outline-primary btn-sm">Thêm Tài khoản giáo viên</button>
+    <table id="tableTKGV" class="table table-striped">
+        <tr>
+            <th>Mã tài khoản</th>
+            <th>Tên đăng nhập</th>
+            <th>Mật khẩu</th>
+            <th>Mã giáo viên</th>
+            <th>Action</th>
+        </tr>
+        @foreach (TaiKhoanGVDTO tkgv in Model.lstTKGV)
+        {
+            <tr id="trTKGV_@tkgv.MaTk">
+                <td>@tkgv.MaTk</td>
+                <td>@tkgv.TenDangNhap</td>
+                <td>@tkgv.MatKhau</td>
+                <td>@tkgv.MaGv</td>
+                <td>
+                    <button type="button" onclick="openModalTKGV(@tkgv.MaTk);" class="btn btn-outline-primary btn-sm">Sửa</button>
+                    <button type="button" onclick="deleteTKGV(@tkgv.MaTk);" class="btn btn-outline-danger btn-sm">xoá</button>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div id="DivModalTKGV" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sửa Tài khoản: <span id="MaTKGV"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" onclick="closeModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="txtTDN">Tên đăng nhập</label>
+                    <input type="text" class="form-control" id="txtTDN" aria-describedby="TDNHelp" placeholder="Tên Đăng nhập">
+                    <small id="TDNHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtMK">Mật khẩu</label>
+                    <input type="text" class="form-control" id="txtMK" aria-describedby="MKHelp" placeholder="Nhập mật khẩu">
+                    <small id="MKHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtMaGv">Mã giáo viên</label>
+                    <input type="text" class="form-control" id="txtMaGV" aria-describedby="MaGVHelp" placeholder="Nhập mã giáo viên">
+                    <small id="MaGVHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()" data-dismiss="modal">Close</button>
+                <button type="button" onclick="saveTKGV()" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

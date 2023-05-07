@@ -1,0 +1,133 @@
+﻿@page
+@using QLL.DTO
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@Html.AntiForgeryToken()
+@model QuanLyLop2_ASP.NETCore.Pages.KhoaHocModel
+@using Microsoft.AspNetCore.Antiforgery
+@{
+    ViewData["Title"] = "Danh sách khoá học";
+}
+@inject IAntiforgery antiforgery
+@{
+    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+<script type="text/javascript">
+    var dataKH = @Html.Raw(JsonSerializer.Serialize(Model.lstKH));
+</script>
+@section menu_nav
+    {
+    <li>
+        <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="background-color: #222d32; height: 35px; margin: 0px 10px; ">
+    </li>
+    <li class="nav-item d-flex align-items-center" style="font-weight: 500;">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Index">
+            @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+            {
+                @Model.busAd.GetById(HttpContext.Session.GetString("user_id")).TenAdmin
+            }
+            else if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+            {
+                @Model.busGV.GetByID(HttpContext.Session.GetString("user_id")).TenGv
+            }
+            else
+            {
+                @Model.busHS.GetHSByID(HttpContext.Session.GetString("user_id")).TenHs
+            }
+        </a>
+    </li>
+    <li class="nav-item d-flex align-items-center">
+        <a class="nav-link btn btn-outline-danger" asp-area="" asp-page="/Index">Đăng xuất</a>
+    </li>
+
+}
+@section menu
+    {
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "hs")
+    {
+        <partial name="~/Pages/Shared/_Menu_HS.cshtml" />
+
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+    {
+        <partial name="~/Pages/Shared/_Menu_GV.cshtml" />
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+    {
+        <partial name="~/Pages/Shared/_Menu_admin.cshtml" />
+    }
+}
+<div>
+    <h1 class="display-4 text-center">Danh sách khoá học</h1>
+    <form method="post" asp-page="/KhoaHoc">
+        <div class="row">
+            <div class="col-2 form-group">
+                <label asp-for="@Model.maKh"></label>
+                <input type="number" class="form-control" asp-for="@Model.maKh" />
+            </div>
+            <div style="margin-block: auto; margin-left: auto;" class="col-2 form-group">
+                <br />
+                <input type="submit" class="btn btn-primary" value="Tìm kiếm" />
+            </div>
+        </div>
+    </form>
+    <button style="margin: 10px 0px" type="button" onclick="openModalKH(null);" class="btn btn-outline-primary btn-sm">Thêm khoá học</button>
+    <table id="tableKH" class="table table-striped">
+        <tr>
+            <th>Mã khoá học</th>
+            <th>Tên khoá hoc</th>
+            <th>Ngày bắt đầu</th>
+            <th>Ngày Ngày kết thúc</th>
+            <th>Action</th>
+        </tr>
+        @foreach (KhoaHocDTO kh in Model.lstKH)
+        {
+            <tr id="trKH_@kh.MaKh">
+                <td>@kh.MaKh</td>
+                <td>@kh.TenKh</td>
+                <td>@kh.NgayBatDau</td>
+                <td>@kh.NgayKetThuc</td>
+                <td>
+                    <button type="button" onclick="openModalKH('@kh.MaKh');" class="btn btn-outline-primary btn-sm">Sửa</button>
+                    <button type="button" onclick="deleteKH('@kh.MaKh');" class="btn btn-outline-danger btn-sm">xoá</button>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div id="DivModalKH" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sửa Khoá học: <span id="MaKH"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" onclick="closeModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="txtTenKH">Tên khoá học</label>
+                    <input type="text" class="form-control" id="txtTenKH" aria-describedby="TenKHHelp" placeholder="Tên khoá học">
+                    <small id="TenKHHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtNBD">Ngày bắt đầu</label>
+                    <input type="date" class="form-control" id="txtNBD" value="2000-01-01"
+                           aria-describedby="NBDHelp">
+                    <small id="NBDHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtNKT">Ngày Kết thúc</label>
+                    <input type="date" class="form-control" id="txtNKT" value="2000-01-01"
+                           aria-describedby="NKTHelp">
+                    <small id="NKTHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()" data-dismiss="modal">Close</button>
+                <button type="button" onclick="saveKH()" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

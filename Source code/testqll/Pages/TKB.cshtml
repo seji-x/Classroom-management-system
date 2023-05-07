@@ -1,0 +1,305 @@
+﻿@page
+@using QLL.DTO
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@Html.AntiForgeryToken()
+@model QuanLyLop2_ASP.NETCore.Pages.TKBModel
+@using Microsoft.AspNetCore.Antiforgery
+@inject IAntiforgery antiforgery
+@{
+    ViewData["Title"] = "Thời khoá biểu";
+}
+@{
+    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+<script type="text/javascript">
+    var dataTKB = @Html.Raw(JsonSerializer.Serialize(Model.lstTKB));
+</script>
+@section menu_nav
+    {
+    <li>
+        <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="background-color: #222d32; height: 35px; margin: 0px 10px; ">
+    </li>
+    <li class="nav-item d-flex align-items-center" style="font-weight: 500;">
+        <a class="nav-link text-dark" asp-area="" asp-page="">
+            @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+            {
+                @Model.busAd.GetById(HttpContext.Session.GetString("user_id")).TenAdmin
+            }
+            else if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+            {
+                @Model.busGV.GetByID(HttpContext.Session.GetString("user_id")).TenGv
+            }
+            else
+            {
+                @Model.busHS.GetHSByID(HttpContext.Session.GetString("user_id")).TenHs
+            }
+        </a>
+    </li>
+    <li class="nav-item d-flex align-items-center">
+        <a class="nav-link btn btn-outline-danger" asp-area="" asp-page="/Index">Đăng xuất</a>
+    </li>
+
+}
+
+@section menu
+    {
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "hs")
+    {
+        <partial name="~/Pages/Shared/_Menu_HS.cshtml" />
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+    {
+        <partial name="~/Pages/Shared/_Menu_GV.cshtml" />
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+    {
+        <partial name="~/Pages/Shared/_Menu_admin.cshtml" />
+    }
+}
+@if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+{
+    <div>
+        <h1 class="display-4 text-center">Danh sách thời khoá biểu</h1>
+        <form method="post" asp-page="/TKB">
+            <div class="row">
+                <div class="col-4 form-group">
+                    <label asp-for="@Model.maTkb"></label>
+                    <input type="number" class="form-control" asp-for="@Model.maTkb" />
+                </div>
+                <div class="col-3 form-group">
+                    <label asp-for="@Model.maKh"></label>
+                    <input type="number" class="form-control" asp-for="@Model.maKh" />
+                </div>
+                <div style="margin-block: auto; margin-left: auto;" class="col-2 form-group">
+                    <br />
+                    <input type="submit" class="btn btn-primary" value="Tìm kiếm" />
+                </div>
+            </div>
+        </form>
+        <button style="margin: 10px 0px" type="button" onclick="openModalTKB(null);" class="btn btn-outline-primary btn-sm">Thêm thời khoá biểu</button>
+        <table id="tableTKB" class="table table-striped">
+            <tr>
+                <th>Mã thời khoá biểu</th>
+                <th>Mã khoá học</th>
+                <td>Trạng thái</td>
+                <th>Action</th>
+            </tr>
+            @foreach (TKBDTO tkb in Model.lstTKB)
+            {
+                <tr id="trTKB_@tkb.MaTkb">
+                    <td>@tkb.MaTkb</td>
+                    <td>@tkb.MaKh</td>
+                    @if (tkb.TrangThai == true)
+                    {
+                        <td>Đang sử dụng</td>
+                    }
+                    else
+                    {
+                        <td>Không sử dụng</td>
+                    }
+                    <td>
+                        <button type="button" onclick="openModalTKB(@tkb.MaTkb);" class="btn btn-outline-primary btn-sm">Sửa</button>
+                        <button type="button" class="btn-ct btn">
+                            <a class="nav-link chitiet btn-outline-primary" asp-area="" asp-page="/ChiTietTKB" asp-route-maTKB="@tkb.MaTkb">chi tiết</a>
+                        </button>
+                        <button type="button" onclick="deleteTKB(@tkb.MaTkb);" class="btn btn-outline-danger btn-sm">xoá</button>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div id="DivModalTKB" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sửa thời khoá biểu: <span id="MaTKB"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" onclick="closeModal()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="txtMaTKB">Mã thời khoá biểu</label>
+                        <input type="text" class="form-control" id="txtMaTKB" aria-describedby="MaTKBHelp" placeholder="Mã thời khoá biểu">
+                        <small id="MaTKBHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="selMaKH">Mã khoá học</label>
+                        <select class="form-control" id="selMaKH">
+                            @foreach (KhoaHocDTO kh in Model.LstKH)
+                            {
+                                <option value="@kh.MaKh">@kh.MaKh</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="selTT">Trạng thái</label>
+                        <select class="form-control" id="selTT">
+                            <option value="true">Sử dụng</option>
+                            <option value="false">Không sử dụng</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()" data-dismiss="modal">Close</button>
+                        <button type="button" onclick="saveTKB()" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+{
+    <div class="container">
+        <h3 class="text-center">
+            Lịch dạy
+        </h3>
+        <br />
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Thứ 2</th>
+                    <th scope="col">Thứ 3</th>
+                    <th scope="col">Thứ 4</th>
+                    <th scope="col">Thứ 5</th>
+                    <th scope="col">Thứ 6</th>
+                    <th scope="col">Thứ 7</th>
+                    <th scope="col">Chủ nhật</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @for (int i = 1; i < 11; i++)
+                {
+                    int flat = 0;
+                    int k = 2;
+                    <tr>
+                        <td scope="row">Tiết @i</td>
+                        @foreach (var tkb in Model.lstTKBCT)
+                        {
+                            @if (tkb.Tiet == i)
+                            {
+                                @for (int j = k; j < 9; j++)
+                                {
+                                    @if (tkb.Thu == j)
+                                    {
+                                        <td>@Model.busMH.GetMHById(tkb.MaMh).TenMh (@Model.busLop.GetLopById(tkb.Malop).TenLop)</td>
+                                        k++;
+                                        break;
+                                    }
+                                    <td></td>
+                                    k++;
+                                }
+                                flat = 1;
+                            }
+                        }
+                        @if (flat != 1)
+                        {
+                            <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
+                            <td></td>
+
+                        }
+                        else if(k != 8)
+                        {
+                            for(int t = k; t < 9;t++ )
+                        {
+                            <td></td>
+                        }
+                        }
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+}
+@if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "hs")
+{
+    <div class="class=" col-md-10 px-1" style=" margin: 10px 0px;">
+        <div class="card shadow-lg">
+            <div class="card-header text-primary font-weight-bold">
+                <h4 class="text-center"> Thời khoá biểu lớp @Model.busLop.GetLopById(Model.busHS.GetHSByID(@HttpContext.Session.GetString("user_id")).MaLop).TenLop</h4>
+                <div class="card-body py-1">
+                    <table class="table table-bordered tkb">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Thứ 2</th>
+                                <th scope="col">Thứ 3</th>
+                                <th scope="col">Thứ 4</th>
+                                <th scope="col">Thứ 5</th>
+                                <th scope="col">Thứ 6</th>
+                                <th scope="col">Thứ 7</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 1; i < 11; i++)
+                            {
+                                int flat = 0;
+                                int k = 2;
+                            <tr>
+                                <td scope="row">Tiết @i</td>
+                                @foreach (var tkb in Model.lstTKBCT)
+                                {
+                                    @if (tkb.Tiet == i)
+                                    {
+                                        @for (int j = k; j < 9; j++)
+                                        {
+                                            @if (tkb.Thu == j)
+                                            {
+                                                <td>@Model.busMH.GetMHById(tkb.MaMh).TenMh (@Model.busGV.GetByID(tkb.MaGv).TenGv.Split(" ")[@Model.busGV.GetByID(tkb.MaGv).TenGv.Split(" ").Length - 1])</td>
+                                                k++;
+                                                break;
+                                            }
+                                            k++;
+                                            <td></td>
+                                        }
+                                        flat = 1;
+                                    }
+                                }
+                                @if (flat != 1)
+                                {
+
+                                    <td></td>
+
+                                    <td></td>
+
+                                    <td></td>
+
+                                    <td></td>
+
+                                    <td></td>
+
+                                    <td></td>
+
+                                }
+                                else if (k != 8)
+                                {
+                                    for (int t = k; t < 9; t++)
+                                    {
+                                        <td></td>
+                                    }
+                                }
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}

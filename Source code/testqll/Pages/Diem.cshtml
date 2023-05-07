@@ -1,0 +1,241 @@
+﻿@page
+@using QLL.DTO
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@Html.AntiForgeryToken()
+@model QuanLyLop2_ASP.NETCore.Pages.DiemModel
+@using Microsoft.AspNetCore.Antiforgery
+@{
+    ViewData["Title"] = "Quản lý điểm";
+}
+@inject IAntiforgery antiforgery
+@{
+    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+<script type="text/javascript">
+    var dataD = @Html.Raw(JsonSerializer.Serialize(Model.lstd));
+    var dataD1 = @Html.Raw(JsonSerializer.Serialize(Model.lstd1));
+    var curPage = 1;
+    var totPage = @Html.Raw(Model.TotalPage);
+</script>
+@section menu_nav
+    {
+    <li>
+        <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="background-color: #222d32; height: 35px; margin: 0px 10px; ">
+    </li>
+    <li class="nav-item d-flex align-items-center" style="font-weight: 500;">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Home">
+            @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+            {
+                @Model.busAd.GetById(HttpContext.Session.GetString("user_id")).TenAdmin
+            }
+            else if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+            {
+                @Model.busGV.GetByID(HttpContext.Session.GetString("user_id")).TenGv
+            }
+            else
+            {
+                @Model.busHS.GetHSByID(HttpContext.Session.GetString("user_id")).TenHs
+            }
+        </a>
+    </li>
+    <li class="nav-item d-flex align-items-center">
+        <a class="nav-link btn btn-outline-danger" asp-area="" asp-page="/Index">Đăng xuất</a>
+    </li>
+
+}
+
+@section menu
+    {
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "hs")
+    {
+        <partial name="~/Pages/Shared/_Menu_HS.cshtml" />
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+    {
+        <partial name="~/Pages/Shared/_Menu_GV.cshtml" />
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+    {
+        <partial name="~/Pages/Shared/_Menu_admin.cshtml" />
+    }
+}
+@if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad" || HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+{
+<div>
+    <h1 class="display-4 text-center">Danh sách điểm</h1>
+    <form method="post" asp-page="/Diem">
+        <div class="row">
+            <div class="col-2 form-group">
+                <label asp-for="@Model.maKh"></label>
+                <input type="number" class="form-control" asp-for="@Model.maKh" />
+            </div>
+            <div class="col-3 form-group">
+                <label asp-for="@Model.maHs"></label>
+                <input type="text" class="form-control" asp-for="@Model.maHs" />
+            </div>
+            <div class="col-3 form-group">
+                <label asp-for="@Model.maMh"></label>
+                <input type="number" class="form-control" asp-for="@Model.maMh" />
+            </div>
+            <div class="col-3 form-group">
+                <label asp-for="@Model.diem"></label>
+                <input type="number" class="form-control" asp-for="@Model.diem" />
+            </div>
+            <div style="margin-block: auto; margin-left: auto;" class="col-2 form-group">
+                <br />
+                <input type="submit" class="btn btn-primary" asp-route-maLop="@Model.maLop" value="Tìm kiếm" />
+            </div>
+        </div>
+    </form>
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+    {
+    <button style="margin: 10px 0px" type="button" onclick="openModalD(null, null, null);" class="btn btn-outline-primary btn-sm">Thêm điểm</button>
+    }
+        
+    <table id="tableD" class="table table-striped">
+        <tr>
+            @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+            {
+                <th>Mã khoá học</th>
+                <th>Mã môn học</th>
+                <th>Mã học sinh</th>
+                <th>Điểm</th>
+                <th>Action</th>
+            }
+            else
+            {
+                <th>Mã khoá học</th>
+                <th>Môn học</th>
+                <th>Học sinh</th>
+                <th>Điểm</th>
+            }
+
+        </tr>
+        <tbody id="tbodyDT">
+            @foreach (DiemDTO m in Model.lstd1)
+            {
+            <tr id="trD_@m.MaMh@m.MaHs@m.MaKh">
+
+                @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+                {
+                    <td>@m.MaKh</td>
+                    <td>@m.MaMh</td>
+                    <td>@m.MaHs</td>
+                    <td>@m.Diem</td>
+                    <td>
+                        <button type="button" onclick="openModalD(@m.MaMh, '@m.MaHs', @m.MaKh);" class="btn btn-outline-primary btn-sm">Sửa</button>
+                        <button type="button" onclick="deleteD(@m.MaMh, '@m.MaHs', @m.MaKh);" class="btn btn-outline-danger btn-sm">xoá</button>
+                    </td>
+                }
+                else
+                {
+                    <td>@m.MaKh</td>
+                    <td>@Model.busMH.GetMHById(m.MaMh).TenMh</td>
+                    <td>@Model.busHS.GetHSByID(m.MaHs).TenHs</td>
+                    <td>@m.Diem</td>
+                }
+
+            </tr>
+            }
+
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="goPre('Diem')">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="javascript:void(0);"><span id="spanCurrentPage">1</span></a></li>
+            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="goNext('Diem')">Next</a></li>
+        </ul>
+    </nav>
+</div><div id="DivModalD" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Sửa điểm:
+                        <span id="MaMH"></span>
+                        <span id="MaHS"></span>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" onclick="closeModal()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="txtMaMH">Mã môn học</label>
+                        <input type="text" class="form-control" id="txtMaMH" aria-describedby="MaMHHelp" placeholder="Mã môn học">
+                        <small id="MaMHHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtMaHS">Mã học sinh</label>
+                        <input type="text" class="form-control" id="txtMaHS" aria-describedby="MaHSHelp" placeholder="Mã học sinh">
+                        <small id="MaHSHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtDiem">Điểm</label>
+                        <input type="text" class="form-control" id="txtDiem" aria-describedby="DiemHelp" placeholder="Điểm">
+                        <small id="DiemHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtDiem">Mã khoá học</label>
+                        <input type="text" class="form-control" id="txtMaKH" aria-describedby="KHHelp" placeholder="Mã khoá học">
+                        <small id="KHHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()" data-dismiss="modal">Close</button>
+                        <button type="button" onclick="saveD()" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script id="diemTemplate" type="text/x-jquery-tmpl">
+        <tr id="trD_${maMh + maHs + maKh}">
+            <td>${maKh}</td>
+            <td>${maMh}</td>
+            <td>${maHs}</td>
+            <td>${diem}</td>
+            <td>
+                <button type="button" onclick="openModalD(${ maMh }, '${maHs}', ${ maKh });" class="btn btn-outline-primary btn-sm">Sửa</button>
+                <button type="button" onclick="deleteD(${ maMh }, '${maHs}', ${ maKh });" class="btn btn-outline-danger btn-sm">xoá</button>
+            </td>
+        </tr>
+    </script>
+}
+@if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "hs")
+{
+    int maLop = Model.busHS.GetHSByID(HttpContext.Session.GetString("user_id")).MaLop;
+    <h1 class="display-4 text-center">Bảng điểm</h1>
+    <table class="table table-bordered">
+        @foreach (KhoaHocDTO kh in Model.lstKH)
+        {
+            <tr class="table-primary">
+                <td colspan="@Model.busKH.GetAllMH(maLop).Count">@kh.TenKh</td>
+            </tr>
+            <tr>
+                @foreach (MonHocDTO mh in Model.busKH.GetAllMH(maLop).ToList())
+                {
+
+                    <td>@mh.TenMh</td>
+
+                }
+            </tr>
+            <tr>
+                @foreach (MonHocDTO mh in Model.busKH.GetAllMH(maLop).ToList())
+                {
+                    @if (Model.busd.GetById(mh.MaMh, HttpContext.Session.GetString("user_id"), kh.MaKh) >= 0)
+                    {
+                        <td scope="row">@Model.busd.GetById(mh.MaMh, HttpContext.Session.GetString("user_id"), kh.MaKh)</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                }
+            </tr>
+        }
+    </table>
+
+}
+

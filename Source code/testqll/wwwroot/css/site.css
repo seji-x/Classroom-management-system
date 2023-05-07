@@ -1,0 +1,354 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+/*button menu*/
+
+.contentCotainer {
+    display: flex;
+}
+/* nav */
+div.left {
+    width: 20%;
+    background-color: #222d32;
+    color: #f7fffe;
+    overflow-y: scroll;
+    top: 0px;
+    bottom: 0px;
+    min-height: 700px;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    background: lightgrey;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #7f7f7f;
+    border-radius: 5px;
+}
+
+div.right {
+    width: 80%;
+    margin: 20px;
+}
+
+#btn-menu {
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 10px;
+}
+
+i.fas {
+    font-size: 30px;
+}
+
+label.form-control {
+    background-color: #f2f2f2;
+    height: 50px;
+    font-size: 20Spx;
+}
+/*menu*/
+#main-menu li {
+    position: relative;
+}
+
+    #main-menu li > a {
+        display: block;
+        padding: 10px 20px;
+        text-decoration: none;
+        color: #f7fffe;
+    }
+
+#main-menu > li.has-child::after {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f104";
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin: 10px 15px;
+}
+
+.fa-angle-left:before {
+    position: absolute;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 20px;
+    top: 10px;
+    right: 5px;
+}
+
+#main-menu > li > a:hover {
+    border-left: 2px solid #3c8dbc;
+}
+
+.sub-menu {
+    background-color: #2c3b41;
+    display: none;
+}
+
+    .sub-menu > li > a {
+        padding: 10px 50px !important;
+        color: #a8a8ab !important;
+    }
+
+        .sub-menu > li > a:hover {
+            color: #f7fffe !important;
+        }
+
+.border-hide {
+    border-left: 2px solid #3c8dbc;
+}
+/* số liệu */
+div.header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+div.item {
+    width: 24%;
+    background-color: antiquewhite;
+    display: flex;
+    margin: 0px 0.5% 15px;
+    border-radius: 5px;
+}
+
+    div.item > a {
+        display: flex;
+        color: black;
+        text-decoration: none;
+    }
+
+div.icon-item > i {
+    margin: 1px;
+    font-size: 100px;
+    background-color: lightblue;
+    border-radius: 5px;
+}
+
+div.title {
+    margin: 10px;
+}
+/**Body index*/
+div.class-items {
+    display: flex;
+    flex-wrap: wrap
+}
+
+    div.class-items .card {
+        width: 30%;
+        margin: 1%;
+    }
+
+        div.class-items .card > a {
+            color: black;
+        }
+
+            div.class-items .card > a:hover {
+                color: black;
+            }
+
+table.tbl-info {
+    background-color: #26b8cd;
+    color: white;
+    border: 0px;
+}
+
+.modal-login {
+    color: #636363;
+    width: 350px;
+    box-shadow: 8px 7px 19px 10px #e6e6e6;
+}
+
+    .modal-login .modal-content {
+        padding: 20px;
+        border-radius: 5px;
+        border: none;
+    }
+
+    .modal-login .modal-header {
+        border-bottom: none;
+        position: relative;
+        justify-content: center;
+    }
+
+    .modal-login h4 {
+        text-align: center;
+        font-size: 26px;
+        margin: 30px 0 -15px;
+    }
+
+    .modal-login .form-control:focus {
+        border-color: #70c5c0;
+    }
+
+    .modal-login .form-control, .modal-login .btn {
+        min-height: 40px;
+        border-radius: 3px;
+    }
+
+    .modal-login .close {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+    }
+
+    .modal-login .modal-footer {
+        background: #ecf0f1;
+        border-color: #dee4e7;
+        text-align: center;
+        justify-content: center;
+        margin: 0 -20px -20px;
+        border-radius: 5px;
+        font-size: 13px;
+    }
+
+        .modal-login .modal-footer a {
+            color: #999;
+        }
+
+    .modal-login .avatar {
+        position: absolute;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        top: -70px;
+        width: 95px;
+        height: 95px;
+        border-radius: 50%;
+        z-index: 9;
+        background: #007BFF;
+        padding: 15px;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+    }
+
+        .modal-login .avatar img {
+            width: 100%;
+        }
+
+    .modal-login.modal-dialog {
+        margin-top: 80px;
+    }
+
+    .modal-login .btn, .modal-login .btn:active {
+        color: #fff;
+        border-radius: 4px;
+        background: #007BFF !important;
+        text-decoration: none;
+        transition: all 0.4s;
+        line-height: normal;
+        border: none;
+    }
+
+        .modal-login .btn:hover, .modal-login .btn:focus {
+            background: #007BFF !important;
+            outline: none;
+        }
+
+.trigger-btn {
+    display: inline-block;
+    margin: 100px auto;
+}
+
+#option {
+    margin: 16px 0;
+    width: 100%;
+    height: 40px;
+    padding: 5px 8px;
+    border-radius: 3px;
+    outline: none;
+}
+
+.error-msg {
+    color: red;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+/*TKB*/
+table.tkb{
+    margin: 10px auto;
+    width: 80% !important;
+    font-weight: 400;
+}
+table.tkb th {
+    min-width: 100px;
+}
+/*template login*/
+ 

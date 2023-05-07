@@ -1,0 +1,112 @@
+﻿@page
+@using QLL.DTO
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@Html.AntiForgeryToken()
+@model QuanLyLop2_ASP.NETCore.Pages.TaiKhoanAdminModel
+@using Microsoft.AspNetCore.Antiforgery
+@{
+    ViewData["Title"] = "Quản lý tài khoản admin";
+}
+@inject IAntiforgery antiforgery
+@{
+    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+<script type="text/javascript">
+    var dataTKA = @Html.Raw(JsonSerializer.Serialize(Model.lstTKA));
+</script>
+@section menu_nav
+    {
+    <li>
+        <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="background-color: #222d32; height: 35px; margin: 0px 10px; ">
+    </li>
+    <li class="nav-item d-flex align-items-center" style="font-weight: 500;">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Index">
+            @Model.busAd.GetById(HttpContext.Session.GetString("user_id")).TenAdmin
+        </a>
+    </li>
+    <li class="nav-item d-flex align-items-center">
+        <a class="nav-link btn btn-outline-danger" asp-area="" asp-page="/Index">Đăng xuất</a>
+    </li>
+
+}
+@section menu
+{
+    <partial name="~/Pages/Shared/_Menu_admin.cshtml" />
+}
+<div>
+    <h1 class="display-4 text-center">Danh tài khoản Admin</h1>
+    <form method="post" asp-page="/TaiKhoanAdmin">
+        <div class="row">
+            <div class="col-2 form-group">
+                <label asp-for="@Model.tdn"></label>
+                <input type="text" class="form-control" asp-for="@Model.tdn" />
+            </div>
+            <div class="col-3 form-group">
+                <label asp-for="@Model.maTk"></label>
+                <input type="number" class="form-control" asp-for="@Model.maTk" />
+            </div>
+            <div style="margin-block: auto; margin-left: auto;" class="col-2 form-group">
+                <br />
+                <input type="submit" class="btn btn-primary" value="Tìm kiếm" />
+            </div>
+        </div>
+    </form>
+    <button style="margin: 10px 0px" type="button" onclick="openModalTKA(null);" class="btn btn-outline-primary btn-sm">Thêm Tài khoản admin</button>
+
+    <table id="tableTKA" class="table table-striped">
+        <tr>
+            <th>Mã tài khoản</th>
+            <th>Tên đăng nhập</th>
+            <th>Mật khẩu</th>
+            <th>Mã admin</th>
+            <th>Action</th>
+        </tr>
+        @foreach (TaiKhoanAdminDTO tka in Model.lstTKA)
+        {
+            <tr id="trTKA_@tka.MaTk">
+                <td>@tka.MaTk</td>
+                <td>@tka.TenDangNhap</td>
+                <td>@tka.MatKhau</td>
+                <td>@tka.MaAdmin</td>
+                <td>
+                    <button type="button" onclick="openModalTKA(@tka.MaTk);" class="btn btn-outline-primary btn-sm">Sửa</button>
+                    <button type="button" onclick="deleteTKA(@tka.MaTk);" class="btn btn-outline-danger btn-sm">xoá</button>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div id="DivModalTKA" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sửa Tài khoản: <span id="MaTk"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" onclick="closeModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="txtTDN">Tên đăng nhập</label>
+                    <input type="text" class="form-control" id="txtTDN" aria-describedby="TDNHelp" placeholder="Tên Đăng nhập">
+                    <small id="TDNHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtMK">Mật khẩu</label>
+                    <input type="text" class="form-control" id="txtMK" aria-describedby="MKHelp" placeholder="Nhập mật khẩu">
+                    <small id="MKHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="form-group">
+                    <label for="txtMK">Mã admin</label>
+                    <input type="text" class="form-control" id="txtMaAd" aria-describedby="MaAdHelp" placeholder="Nhập mã admin">
+                    <small id="MaAdHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()" data-dismiss="modal">Close</button>
+                <button type="button" onclick="saveTKA()" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

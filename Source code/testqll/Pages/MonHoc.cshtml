@@ -1,0 +1,128 @@
+﻿@page
+@using QLL.DTO
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@Html.AntiForgeryToken()
+@model QuanLyLop2_ASP.NETCore.Pages.MonHocModel
+@using Microsoft.AspNetCore.Antiforgery
+@{
+    ViewData["Title"] = "danh sách môn học";
+}
+@inject IAntiforgery antiforgery
+@{
+    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+<script type="text/javascript">
+    var dataMH = @Html.Raw(JsonSerializer.Serialize(Model.lstMH));
+    var dataMH1 = @Html.Raw(JsonSerializer.Serialize(Model.lstMH1));
+    var curPage = 1;
+    var totPage = @Html.Raw(Model.TotalPage);
+</script>
+@section menu_nav
+    {
+    <li>
+        <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="background-color: #222d32; height: 35px; margin: 0px 10px; ">
+    </li>
+    <li class="nav-item d-flex align-items-center" style="font-weight: 500;">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Index">
+            @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+            {
+                @Model.busAd.GetById(HttpContext.Session.GetString("user_id")).TenAdmin
+            }
+            else if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+            {
+                @Model.busGV.GetByID(HttpContext.Session.GetString("user_id")).TenGv
+            }
+            else
+            {
+                @Model.busHS.GetHSByID(HttpContext.Session.GetString("user_id")).TenHs
+            }
+        </a>
+    </li>
+    <li class="nav-item d-flex align-items-center">
+        <a class="nav-link btn btn-outline-danger" asp-area="" asp-page="/Index">Đăng xuất</a>
+    </li>
+
+}
+@section menu
+    {
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "hs")
+    {
+        <partial name="~/Pages/Shared/_Menu_HS.cshtml" />
+
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+    {
+        <partial name="~/Pages/Shared/_Menu_GV.cshtml" />
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+    {
+        <partial name="~/Pages/Shared/_Menu_admin.cshtml" />
+    }
+}
+<div>
+    <h1 class="display-4 text-center">Danh sách môn học</h1>
+    <button style="margin: 10px 0px" type="button" onclick="openModalMH(null);" class="btn btn-outline-primary btn-sm">Thêm Môn học</button>
+    <table id="tableMH" class="table table-striped">
+        <tr>
+            <th>Mã môn học</th>
+            <th>Tên môn học</th>
+            <th>Action</th>
+        </tr>
+        <tbody id="tbodyDT">
+            @foreach (MonHocDTO m in Model.lstMH1)
+            {
+                <tr id="trMH_@m.MaMh">
+                    <td>@m.MaMh</td>
+                    <td>@m.TenMh</td>
+                    <td>
+                        <button type="button" onclick="openModalMH(@m.MaMh);" class="btn btn-outline-primary btn-sm">Sửa</button>
+                        <button type="button" onclick="deleteMH(@m.TenMh);" class="btn btn-outline-danger btn-sm">xoá</button>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="goPre('MonHoc')">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="javascript:void(0);"><span id="spanCurrentPage">1</span></a></li>
+            <li class="page-item"><a class="page-link" href="javascript:void(0);" onclick="goNext('MonHoc')">Next</a></li>
+        </ul>
+    </nav>
+</div>
+<div id="DivModalMH" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sửa môn học: <span id="MaMH"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" onclick="closeModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="txtTenMH">Tên môn học</label>
+                    <input type="text" class="form-control" id="txtTenMH" aria-describedby="TenMHHelp" placeholder="Tên môn học">
+                    <small id="TenMHHelp" class="form-text text-muted">Không được bỏ trống.</small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="saveMH()" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="mhTemplate" type="text/x-jquery-tmpl">
+    <tr id="trMH_${maMh}">
+        <td>${maMh}</td>
+        <td>${tenMh}</td>
+        <td>
+            <button type="button" onclick="openModalMH('${maMh}');" class="btn btn-outline-primary btn-sm">Sửa</button>
+            <button type="button" onclick="deleteMH('${maMh}');" class="btn btn-outline-danger btn-sm">xoá</button>
+        </td>
+    </tr>
+</script>

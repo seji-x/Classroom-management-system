@@ -1,0 +1,132 @@
+﻿@page "/ThongTinLop"
+@using QLL.DTO
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@Html.AntiForgeryToken()
+@model QuanLyLop.Pages.InFo_LopModel
+@using Microsoft.AspNetCore.Antiforgery
+@{
+    ViewData["Title"] = "thông tin lớp";
+}
+@inject IAntiforgery antiforgery
+@{
+    var token = antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+}
+@section menu_nav
+    {
+    <li>
+        <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="background-color: #222d32; height: 35px; margin: 0px 10px; ">
+    </li>
+    <li class="nav-item d-flex align-items-center" style="font-weight: 500;">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Index">
+            @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+            {
+                @Model.busAd.GetById(HttpContext.Session.GetString("user_id")).TenAdmin
+            }
+            else if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+            {
+                @Model.busGV.GetByID(HttpContext.Session.GetString("user_id")).TenGv
+            }
+            else
+            {
+                @Model.busHS.GetHSByID(HttpContext.Session.GetString("user_id")).TenHs
+            }
+        </a>
+    </li>
+    <li class="nav-item d-flex align-items-center">
+        <a class="nav-link btn btn-outline-danger" asp-area="" asp-page="/Index">Đăng xuất</a>
+    </li>
+
+}
+
+@section menu
+    {
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "hs")
+    {
+        <partial name="~/Pages/Shared/_Menu_HS.cshtml" />
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+    {
+        <partial name="~/Pages/Shared/_Menu_GV.cshtml" />
+    }
+    @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "ad")
+    {
+        <partial name="~/Pages/Shared/_Menu_admin.cshtml" />
+    }
+}
+
+<div class="title-info">
+
+    @if (Model.lop != null)
+    {
+        <table class="table table-borderless tbl-info">
+            <tr>
+                <td>Tên lớp: @Model.lop.TenLop</td>
+                <td>Mã lớp: @Model.lop.MaLop</td>
+            </tr>
+            <tr>
+                <td>Mô tả: @Model.lop.MoTa</td>
+                <td>Phòng học: @Model.lop.PhongHoc</td>
+            </tr>
+            @if (HttpContext.Session.GetString("user_id").Substring(0, 2) == "gv")
+            {
+                @foreach (List_Mh mh in Model.lstMH)
+                {
+                    @if (Model.lop.MaLop == mh.maLop)
+                    {
+                        <tr>
+                            <td colspan="2">Dạy: @mh.tenMH</td>
+                        </tr>
+                    }
+                }
+            }
+        </table>
+        <div>
+            <a class="btn btn-primary" asp-area="" asp-page="/Diem" asp-route-maLop="@Model.maLop">
+                Bảng điểm
+            </a>
+        </div>
+        <div class="ds-hs">
+            <h3>Danh sách học sinh</h3>
+            <form method="post" asp-page="/InFo_Lop" asp-route-maLop="@Model.lop.MaLop">
+                <div class="row">
+                    <div class="col-2 form-group">
+                        <label asp-for="@Model.maHS"></label>
+                        <input type="text" class="form-control" asp-for="@Model.maHS" />
+                    </div>
+                    <div class="col-3 form-group">
+                        <label asp-for="@Model.tenHS"></label>
+                        <input type="text" class="form-control" asp-for="@Model.tenHS" />
+                    </div>
+                    <div style="margin-block: auto; margin-left: auto;" class="col-2 form-group">
+                        <br />
+                        <input type="submit" class="btn btn-primary" value="Tìm kiếm" />
+                    </div>
+                </div>
+            </form>
+            <table class="table ">
+                <tr>
+                    <th scope="col">Mã số</th>
+                    <th scope="col">Họ tên</th>
+                    <th scope="col">Giới tính</th>
+                    <th scope="col">Ngày sinh</th>
+                    <th scope="col">Số điện thoại</th>
+                </tr>
+                @if (Model.lstHS != null && Model.lstHS.Count != 0)
+                {
+                    @foreach (HocSinhDTO hs in Model.lstHS)
+                    {
+                        <tr>
+                            <th scope="col">@hs.MaHs</th>
+                            <th scope="col">@hs.TenHs</th>
+                            <th scope="col">@hs.GioiTinh</th>
+                            <th scope="col">@hs.NgaySinh.ToString("dd/MM/yyyy")</th>
+                            <th scope="col">@hs.Sdt</th>
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+    }
+
+</div>

@@ -1,0 +1,98 @@
+﻿@page
+@model QuanLyLop.Pages.PhoDiemModel
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Antiforgery
+@Html.AntiForgeryToken()
+@{
+    ViewData["Title"] = "Phổ điểm";
+}
+<script type="text/javascript">
+    var dataD = @Html.Raw(JsonSerializer.Serialize(Model.lstd));
+</script>
+@section menu_nav
+    {
+    <li>
+        <img src="~/images/avatar.png" alt="Avatar" class="rounded-circle" style="background-color: #222d32; height: 35px; margin: 0px 10px; ">
+    </li>
+    <li class="nav-item d-flex align-items-center" style="font-weight: 500;">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Home">
+            @Model.busAd.GetById(HttpContext.Session.GetString("user_id")).TenAdmin
+        </a>
+    </li>
+    <li class="nav-item d-flex align-items-center">
+        <a class="nav-link btn btn-outline-danger" asp-area="" asp-page="/Index">Đăng xuất</a>
+    </li>
+
+}
+@section menu
+{
+    <partial name="~/Pages/Shared/_Menu_admin.cshtml" />
+}
+@if (Model.msg_err != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <h3>@Model.msg_err</h3>
+    </div>
+}
+<div>
+    <form method="post" asp-page="/PhoDiem">
+        <div class="row">
+            <div class="col-2 form-group">
+                <label asp-for="@Model.maKh"></label>
+                <input type="text" class="form-control" asp-for="@Model.maKh" />
+            </div>
+            <div class="col-3 form-group">
+                <label asp-for="@Model.maMh"></label>
+                <input type="text" class="form-control" asp-for="@Model.maMh" />
+            </div>
+            <div class="col-3 form-group">
+                <label asp-for="@Model.maLop"></label>
+                <input type="text" class="form-control" asp-for="@Model.maLop" />
+            </div>
+            <div style="margin-block: auto; margin-left: auto;" class="col-2 form-group">
+                <br />
+                <input type="submit" class="btn btn-primary" asp-route-maLop="@Model.maLop" value="Xem phổ điểm" />
+            </div>
+        </div>
+    </form>
+</div>
+@if (Model.lstd != null)
+{
+    
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var dataInsedeCol = [['Điểm', 'Số lượng', { role: "style" }],];
+        for (var i = 0; i < dataD.length; i++) {
+            console.log(dataD[i]);
+            var arr = [dataD[i].Diem, dataD[i].TotalSV, '#3366cc'];
+            dataInsedeCol.push(arr);
+        }
+        var data = google.visualization.arrayToDataTable(dataInsedeCol);
+
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+            {
+                calc: "stringify",
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation"
+            },
+            2]);
+
+        var options = {
+            title: "Phổ điểm",
+            width: 900,
+            height: 400,
+            bar: { groupWidth: "95%" },
+            legend: { position: "none" },
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+        chart.draw(view, options);
+    }
+</script>
+<div id="columnchart_values" style="width: 900px; height: 300px;"></div>
+}
