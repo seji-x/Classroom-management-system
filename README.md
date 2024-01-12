@@ -9,10 +9,10 @@ Hệ thống quản lý lớp học bao gồm quản trị viên, giáo viên v�
 - Language: C#, Js, Css, Html
 
 ## Database
-- Sử dụng: SQL SEVER / https://learn.microsoft.com/en-us/sql/ssms
+- Use: SQL SEVER / https://learn.microsoft.com/en-us/sql/ssms
 - Demo: https://github.com/ddryuu/Information-system-design/blob/main/QuanLyLop.sql
 
 ## Theoretical basis
-
+- Introducing .NET Technology: [Asp.NET MVC](https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions-1/overview/asp-net-mvc-overview)
 
 
