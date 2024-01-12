@@ -35,3 +35,35 @@ Model Validation automatically performs validation and the server
 - Developed on client-side: https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Understanding_client-side_tools
 > ASP.NET Core is designed to seamlessly integrate with multiple client-sides
 frameworks, including AngularJS, KnockoutJS and Bootstrap.
+
+## System analysis and design
+### Use case specification
+1. Xác định tác nhân
+- Học sinh (user)
+- Quản lý (admin)
+- Giáo viên (user)
+2. Xác định Use Case
+```
+ADMIN
+- Use Case đăng nhập (login)
+- Use Case đăng xuất (logout)
+- Use Case quản lí tài khoản học sinh
+- Use Case quản lí tài khoản giáo viên
+- Use Case quản lí tài khoản admin
+- Use Case quản lí môn học
+- Use Case quản lý lớp
+- Use Case quản lí Điểm
+- Use Case quản lí học sinh
+- Use Case quản lí giáo viên
+Hoc sinh
+- Use Case đăng nhập (login)
+- Use Case đăng xuất (logout)
+- Use Case xem điểm
+- Use Case xem thông tin
+Giao Vien
+- Use Case đăng nhập (login)
+- Use Case đăng xuất (logout)
+- Use Case xem danh sách hs
+- Use Case xem lịch dạy
+```
+
