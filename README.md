@@ -1,7 +1,9 @@
 # Classroom system management project
 
 ## Overview
-Hệ thống quản lý lớp học bao gồm quản trị viên, giáo viên và học sinh. Quản trị viên có trách nhiệm quản lý tài khoản, phân quyền, và quản lý thông tin lớp học. Giáo viên có thể quản lý thông tin lớp, điểm số, và tương tác với học sinh. Học sinh có thể xem thông tin cá nhân, kết quả học tập và tham gia các khóa học.
+[VN] Hệ thống quản lý lớp học bao gồm quản trị viên, giáo viên và học sinh. Quản trị viên có trách nhiệm quản lý tài khoản, phân quyền, và quản lý thông tin lớp học. Giáo viên có thể quản lý thông tin lớp, điểm số, và tương tác với học sinh. Học sinh có thể xem thông tin cá nhân, kết quả học tập và tham gia các khóa học.
+
+[EN] The classroom management system includes administrators, teachers, and students. Administrators are responsible for account management, authorization, and class information management. Teachers can manage class information, scores, and interact with students. Students can view personal information, academic results, and take courses.
 
 ## Implementation environment
 - Framework: https://dotnet.microsoft.com/en-us/apps/aspnet
