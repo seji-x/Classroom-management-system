@@ -42,6 +42,7 @@ frameworks, including AngularJS, KnockoutJS and Bootstrap.
 - Học sinh (user)
 - Quản lý (admin)
 - Giáo viên (user)
+  
 2. Xác định Use Case
 ```
 ADMIN
@@ -66,4 +67,20 @@ Giao Vien
 - Use Case xem danh sách hs
 - Use Case xem lịch dạy
 ```
-
+### Business description
+1. For Students
+- The website is built with the goal of providing students with an easy-to-use platform to manage their learning activities, such as checking grades, viewing schedules, and more.
+- Students start by logging into the website using their respective accounts, where they can access personal information including their full name, student ID, date of birth, address, email, and the current class they are attending.
+- Additionally, students can log into their accounts to check their grades and view their individual schedules.
+2. For Teachers
+- Here, teachers can log in to their accounts to view the list of students in the classes they teach and check their teaching schedules.
+3. For Administrators
+- The website provides a user interface for system administrators to manage all the functions it offers. Administrators can access features such as checking grades, student information, teacher information, class details, and many other functions.
+4. Main Functions of the Website:
+- Design interface using Bootstrap, Javascript, CSS.
+- Load database content onto the website.
+- Implement operations to add, delete, and edit information for students and teachers.
+- Implement login functionality for students, teachers, and administrators.
+- Use a shared layout for consistency.
+...
+## HANDCRAFTED CONSTRUCTION
