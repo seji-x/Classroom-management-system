@@ -14,5 +14,19 @@ Hệ thống quản lý lớp học bao gồm quản trị viên, giáo viên v�
 
 ## Theoretical basis
 - Introducing .NET Technology: [Asp.NET MVC](https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions-1/overview/asp-net-mvc-overview)
-
-
+> ASP.NET Core is a collection of libraries as a new Framework for building applications
+web when there is an internet connection, it is a Microsoft product that is quite famous in the community
+co-programming nowadays when there are so many bloggers, tech vblogs showing attention and
+care about it. As soon as it appeared, there were a series of ASP.NET Core tutorials and articles
+Comparative writing, instructions, and discussions are dissected.
+- Build ASP.NET Core Web UI and ASP.NET Core Web API using [ASP.NET Core MVC](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-8.0&tabs=visual-studio)
+> For a long time, web programming has always been the playground of PHP, but with its appearance
+ASP.NET Core has proven its power enough to compete with him
+large PHP. And here are the reasons why .NET can confidently compare with PHP.
+The Web applications you create can be tested according to the MVC (Model-View
+Controller)
+Razor provides us with an efficient language to create Views
+Tag Helper for server side code involved in creating and rendering HTML elements
+Automatically map data from the HTTP request to the parameters of the above action method
+Model Binding.
+Model Validation automatically performs validation and the server
