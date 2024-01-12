@@ -30,3 +30,6 @@ Tag Helper for server side code involved in creating and rendering HTML elements
 Automatically map data from the HTTP request to the parameters of the above action method
 Model Binding.
 Model Validation automatically performs validation and the server
+- Developed on client-side: https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Understanding_client-side_tools
+> ASP.NET Core is designed to seamlessly integrate with multiple client-sides
+frameworks, including AngularJS, KnockoutJS and Bootstrap.
